@@ -1,6 +1,10 @@
 .main {
   padding: 16px;
-  min-width: 145px;
+  min-width: 200px;
+}
+
+.list {
+  text-align: center;
 }
 
 .list-item {
