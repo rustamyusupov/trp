@@ -1,0 +1,11 @@
+{
+  "name": "TRP",
+  "description": "Copy TrainerRoad workouts to TrainerPeaks",
+  "version": "0.1",
+  "author": "Rustam Yusupov",
+  "manifest_version": 3,
+  "permissions": ["storage"],
+  "action": {
+    "default_popup": "index.html"
+  }
+}
