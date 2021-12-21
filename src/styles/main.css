@@ -1,0 +1,11 @@
+.main {
+  padding: 16px;
+}
+
+.list-item {
+  white-space: nowrap;
+}
+
+.list-item:not(:last-child) {
+  margin-bottom: 4px;
+}
