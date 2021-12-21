@@ -1,6 +1,6 @@
 const urls = {
-  trWorkouts: 'trainerroad.com/app/cycling/workouts',
-  tpCalendar: 'trainingpeaks.com/#calendar',
+  workouts: 'trainerroad.com/app/cycling/workouts',
+  calendar: 'trainingpeaks.com/#calendar',
 };
 
 const hints = {
@@ -12,7 +12,7 @@ const getUrl = async () => {
   const option = { active: true, currentWindow: true };
   const [tab] = await chrome.tabs.query(option);
 
-  return tab?.urls;
+  return tab?.url;
 };
 
 const textRender = (content) => {
@@ -24,7 +24,7 @@ const textRender = (content) => {
 const listRender = (content) => {
   const list = document.getElementById('list');
 
-  list.innerHTML = 'Workouts';
+  list.innerHTML = content;
 };
 
 const formatters = {
@@ -32,29 +32,31 @@ const formatters = {
   list: listRender,
 };
 
-const render = (data, format) => formatters[format](data);
+const render = (data) =>
+  formatters[Array.isArray(data) ? 'list' : 'text'](data);
 
 const init = async () => {
   const pageUrl = await getUrl();
-  const isWorkouts = pageUrl.includes(urls.trWorkouts);
-  const isCalendar = pageUrl.includes(urls.tpCalendar);
-  const isTargetPage = isWorkouts || isCalendar;
+  const isWorkoutsPage = pageUrl.includes(urls.workouts);
+  const isCalendarPage = pageUrl.includes(urls.calendar);
+  const isTargetPage = isWorkoutsPage || isCalendarPage;
 
   if (!isTargetPage) {
-    render(hints.other, 'text');
+    render(hints.other);
     return;
   }
 
-  // get saved workouts
-  const workouts = [];
-  const hasWorkoutsForTp = isCalendar && workouts.length === 0;
+  const workouts = []; // get saved workouts
+  const hasNoWorkoutsForCalendar = isCalendarPage && workouts.length === 0;
 
-  if (!hasWorkoutsForTp) {
-    render(hints.tp, 'text');
+  if (hasNoWorkoutsForCalendar) {
+    render(hints.tp);
     return;
   }
 
-  render(workouts, 'list');
+  render(workouts);
 };
+
+// think about split js
 
 init();
