@@ -1,5 +1,6 @@
 .main {
   padding: 16px;
+  min-width: 145px;
 }
 
 .list-item {
