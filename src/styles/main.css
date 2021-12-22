@@ -3,14 +3,6 @@
   min-width: 200px;
 }
 
-.list {
+.message {
   text-align: center;
-}
-
-.list-item {
-  white-space: nowrap;
-}
-
-.list-item:not(:last-child) {
-  margin-bottom: 4px;
 }
