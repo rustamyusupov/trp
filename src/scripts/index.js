@@ -1,3 +1,4 @@
+import { apis } from '../config.js';
 import { download } from './download.js';
 import { upload } from './upload.js';
 
@@ -25,11 +26,9 @@ const libId = '123';
 
 const init = async () => {
   const pageUrl = await getUrl();
-  const isWorkoutPage = pageUrl.includes(
-    'trainerroad.com/app/cycling/workouts'
-  );
-  const isCalendarPage = pageUrl.includes('trainingpeaks.com/#calendar');
-  const isTargetPage = isWorkoutPage || isCalendarPage;
+  const isWorkoutsPage = pageUrl.includes(apis.tr.workouts);
+  const isCalendarPage = pageUrl.includes(apis.tp.calendar);
+  const isTargetPage = isWorkoutsPage || isCalendarPage;
 
   if (!isTargetPage) {
     render('Please open TR&nbsp;workout or TP&nbsp;calendar.');
@@ -39,7 +38,7 @@ const init = async () => {
   const { workout } = await load('workout');
   const isSaved = pageUrl.includes(workout?.itemName.toLowerCase());
 
-  if (isWorkoutPage && !isSaved) {
+  if (isWorkoutsPage && !isSaved) {
     render('Saving...');
 
     const workout = await download(libId, pageUrl);
@@ -63,12 +62,13 @@ const init = async () => {
       active: true,
       currentWindow: true,
     });
+    const uploadUrl = `${apis.tp.libraries}/${libId}/items`;
 
     chrome.scripting.executeScript(
       {
         target: { tabId: tab.id },
         function: upload,
-        args: [libId, workout],
+        args: [uploadUrl, workout],
       },
       () => {
         new Promise((resolve) => {
@@ -80,7 +80,7 @@ const init = async () => {
           console.log(result);
 
           if (result?.itemName) {
-            render('Uploaded');
+            render(`Workout ${workout.itemName} uploaded.`);
             return;
           }
 

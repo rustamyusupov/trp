@@ -1,3 +1,5 @@
+import { apis } from '../config.js';
+
 const getTpWorkout = (libId, data) => {
   const intervalData = data.Workout.intervalData;
   const structure = [];
@@ -62,9 +64,7 @@ const getTpWorkout = (libId, data) => {
   const duration = parseInt(data.Workout.Details.Duration) / 60;
   let description = data.Workout.Details.WorkoutDescription;
 
-  description +=
-    '\n\nhttps://www.trainerroad.com/cycling/workouts/' +
-    data.Workout.Details.Id;
+  description += `\n\n${apis.tr.workouts}${data.Workout.Details.Id}`;
 
   const polyline = [];
   let lastPercent = 0;
@@ -87,7 +87,7 @@ const getTpWorkout = (libId, data) => {
   const workout = {
     exerciseLibraryId: libId,
     exerciseLibraryItemId: '',
-    itemName: data.Workout.Details.WorkoutName.replace(/\s+/g, ''),
+    itemName: data.Workout.Details.WorkoutName,
     itemType: 2,
     workoutTypeId: 2,
     workoutType: '',
@@ -123,10 +123,9 @@ const getTpWorkout = (libId, data) => {
 
 export const download = async (libId, pageUrl) => {
   const workoutId = pageUrl.split('/').pop().split('-')[0];
-  const trAPI = 'https://www.trainerroad.com/app/api/workoutdetails';
-  const trUrl = `${trAPI}/${workoutId}`;
+  const url = `${apis.tr.workoutDetails}/${workoutId}`;
 
-  const response = await fetch(trUrl, { credentials: 'include' });
+  const response = await fetch(url, { credentials: 'include' });
   const data = await response.json();
   const workout = getTpWorkout(libId, data);
 
