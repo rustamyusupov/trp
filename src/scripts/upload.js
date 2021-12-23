@@ -6,5 +6,4 @@ export const upload = (url, workout) =>
     headers: { 'Content-Type': 'application/json' },
   })
     .then((response) => response?.json())
-    .then(chrome.runtime.sendMessage)
-    .catch(chrome.runtime.sendMessage);
+    .then(chrome.runtime.sendMessage);

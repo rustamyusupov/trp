@@ -1,13 +1,11 @@
 import { apis } from '../config.js';
+
+import { storage } from './storage.js';
 import { download } from './download.js';
 import { upload } from './upload.js';
+import { getActiveTab } from './utils.js';
 
-const getUrl = async () => {
-  const option = { active: true, currentWindow: true };
-  const [tab] = await chrome.tabs.query(option);
-
-  return tab?.url;
-};
+const libId = '1752460';
 
 const render = (content) => {
   const list = document.getElementById('message');
@@ -15,17 +13,9 @@ const render = (content) => {
   list.innerHTML = content;
 };
 
-const save = (data) => chrome.storage.local.set(data);
-
-const load = (name) =>
-  new Promise((resolve) => {
-    chrome.storage.local.get(name, (response) => resolve(response));
-  });
-
-const libId = '123';
-
 const init = async () => {
-  const pageUrl = await getUrl();
+  const tab = await getActiveTab();
+  const pageUrl = tab?.url;
   const isWorkoutsPage = pageUrl.includes(apis.tr.workouts);
   const isCalendarPage = pageUrl.includes(apis.tp.calendar);
   const isTargetPage = isWorkoutsPage || isCalendarPage;
@@ -35,7 +25,7 @@ const init = async () => {
     return;
   }
 
-  const { workout } = await load('workout');
+  const { workout } = await storage.get('workout');
   const workoutId = pageUrl.split('/').pop().split('-')[0];
   const isSaved = workoutId === String(workout?.workoutId);
 
@@ -46,7 +36,7 @@ const init = async () => {
 
     const workout = await download(downloadUrl, libId);
 
-    save({ workout });
+    storage.set({ workout });
     render(`Workout ${workout.itemName} saved.`);
     return;
   }
@@ -59,13 +49,9 @@ const init = async () => {
   }
 
   if (isCalendarPage) {
-    render('Uploading...');
-
-    const [tab] = await chrome.tabs.query({
-      active: true,
-      currentWindow: true,
-    });
     const uploadUrl = `${apis.tp.libraries}/${libId}/items`;
+
+    render('Uploading...');
 
     chrome.scripting.executeScript(
       {
@@ -79,22 +65,20 @@ const init = async () => {
             chrome.runtime.onMessage.removeListener(listener);
             resolve(result);
           });
-        }).then((result) => {
-          console.log(result);
-
-          if (result?.itemName) {
-            render(`Workout ${workout.itemName} uploaded.`);
-            return;
-          }
-
-          render(`Something wrong: ${result?.message?.toLowerCase()}`);
-        });
+        }).then((result) =>
+          render(
+            result?.itemName
+              ? `Workout ${workout.itemName} uploaded.`
+              : `Something wrong: ${result?.message?.toLowerCase()}`
+          )
+        );
       }
     );
 
     return;
   }
 
+  // TODO move to isWorkoutsPage
   render(`Already saved ${workout.itemName}.`);
 };
 
