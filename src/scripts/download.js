@@ -1,6 +1,6 @@
 import { apis } from '../config.js';
 
-const getTpWorkout = (libId, data) => {
+const getTpWorkout = (libId) => (data) => {
   const intervalData = data.Workout.intervalData;
   const structure = [];
   let end = 0;
@@ -89,6 +89,7 @@ const getTpWorkout = (libId, data) => {
     exerciseLibraryItemId: '',
     itemName: data.Workout.Details.WorkoutName,
     itemType: 2,
+    workoutId: data.Workout.Details.Id,
     workoutTypeId: 2,
     workoutType: '',
     distancePlanned: '',
@@ -121,13 +122,7 @@ const getTpWorkout = (libId, data) => {
   return workout;
 };
 
-export const download = async (libId, pageUrl) => {
-  const workoutId = pageUrl.split('/').pop().split('-')[0];
-  const url = `${apis.tr.workoutDetails}/${workoutId}`;
-
-  const response = await fetch(url, { credentials: 'include' });
-  const data = await response.json();
-  const workout = getTpWorkout(libId, data);
-
-  return workout;
-};
+export const download = (url, libId) =>
+  fetch(url, { credentials: 'include' })
+    .then((response) => response?.json())
+    .then(getTpWorkout(libId));

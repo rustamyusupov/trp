@@ -6,6 +6,5 @@ export const upload = (url, workout) =>
     headers: { 'Content-Type': 'application/json' },
   })
     .then((response) => response?.json())
-    .then((data) => chrome.runtime.sendMessage(data))
-    // catch error when incorrect libId
-    .catch((e) => console.log(e) || chrome.runtime.sendMessage(e));
+    .then(chrome.runtime.sendMessage)
+    .catch(chrome.runtime.sendMessage);

@@ -36,12 +36,15 @@ const init = async () => {
   }
 
   const { workout } = await load('workout');
-  const isSaved = pageUrl.includes(workout?.itemName.toLowerCase());
+  const workoutId = pageUrl.split('/').pop().split('-')[0];
+  const isSaved = workoutId === String(workout?.workoutId);
 
   if (isWorkoutsPage && !isSaved) {
+    const downloadUrl = `${apis.tr.workoutDetails}/${workoutId}`;
+
     render('Saving...');
 
-    const workout = await download(libId, pageUrl);
+    const workout = await download(downloadUrl, libId);
 
     save({ workout });
     render(`Workout ${workout.itemName} saved.`);
