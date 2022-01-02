@@ -4,6 +4,7 @@ import { fetchWorkout } from './trainerroad.js';
 import { convert, storage } from './utils/index.js';
 import { fetchLibId, uploadWorkout } from './trainingpeaks.js';
 import { mainLocale, libraryLocale } from './locales/index.js';
+import { delay } from './utils/index.js';
 
 const getActiveTab = () =>
   chrome.tabs
@@ -64,6 +65,8 @@ const app = async () => {
       const { workout } = await storage.get('workout');
       await uploadWorkout({ libId, tabId: tab?.id, workout });
       render(mainLocale.uploaded);
+      await delay(1);
+      chrome.tabs.reload(tab?.id);
 
       return;
     }

@@ -4,6 +4,6 @@ export const main = {
   unknown: 'Please open TR&nbsp;workout or TP&nbsp;calendar.',
   unknownTP: 'Please open TP&nbsp;calendar.',
   unknownTR: 'Please open TR&nbsp;workout.',
-  uploaded: 'Workout uploaded.',
+  uploaded: 'Workout uploaded to the&nbsp;Library, reload...',
   uploading: 'Uploading...',
 };
