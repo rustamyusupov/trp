@@ -1,24 +1,22 @@
 import { api } from '../api.js';
 
-const upload = (url, workout) =>
+const request = (url, options) =>
   fetch(url, {
-    method: 'POST',
-    body: JSON.stringify(workout),
+    method: 'GET',
     credentials: 'include',
     headers: { 'Content-Type': 'application/json' },
+    ...options,
   })
     .then((response) => response?.json())
     .then(chrome.runtime.sendMessage);
 
-export const uploadWorkout = ({ libId, tabId, workout }) => {
-  const url = `${api.trainingpeaks.libraries}/${libId}/items`;
-
-  return new Promise((resolve, reject) => {
+const script = ({ tabId, url, options = {} }) =>
+  new Promise((resolve, reject) => {
     chrome.scripting.executeScript(
       {
         target: { tabId },
-        function: upload,
-        args: [url, workout],
+        function: request,
+        args: [url, options],
       },
       new Promise((res) => {
         chrome.runtime.onMessage.addListener(function listener(result) {
@@ -34,4 +32,20 @@ export const uploadWorkout = ({ libId, tabId, workout }) => {
       })
     );
   });
+
+export const fetchLibId = async (tabId) => {
+  const result = await script({ tabId, url: api.trainingpeaks.libraries });
+  const library = result.find(
+    ({ libraryName }) => libraryName === 'My Library'
+  );
+
+  return library?.exerciseLibraryId;
+};
+
+export const uploadWorkout = async ({ libId, tabId, workout }) => {
+  const url = `${api.trainingpeaks.libraries}/${libId}/items`;
+  const options = { method: 'POST', body: JSON.stringify(workout) };
+  const result = await script({ tabId, url, options });
+
+  return result;
 };

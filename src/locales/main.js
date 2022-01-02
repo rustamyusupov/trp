@@ -1,4 +1,4 @@
-export const locale = {
+export const main = {
   downloaded: 'Workout downloaded.',
   downloading: 'Downloading...',
   unknown: 'Please open TR&nbsp;workout or TP&nbsp;calendar.',

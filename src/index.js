@@ -1,9 +1,9 @@
-import { libId, pages, messageElement } from './constants.js';
+import { pages, messageElement } from './constants.js';
 import { api } from './api.js';
 import { fetchWorkout } from './trainerroad.js';
 import { convert, storage } from './utils/index.js';
-import { uploadWorkout } from './trainingpeaks.js';
-import { locale } from './locale.js';
+import { fetchLibId, uploadWorkout } from './trainingpeaks.js';
+import { mainLocale, libraryLocale } from './locales/index.js';
 
 const getActiveTab = () =>
   chrome.tabs
@@ -19,20 +19,24 @@ const render = (content) =>
 const app = async () => {
   const tab = await getActiveTab();
   const { host } = new URL(tab?.url);
+  const { libId } = await storage.get('libId');
 
   if (host === pages.trainerroad) {
-    render(locale.downloading);
-
     try {
+      if (!libId) {
+        render(libraryLocale.warning);
+        return;
+      }
+
+      render(mainLocale.downloading);
       const data = await fetchWorkout(tab?.url);
       const workout = convert({
         libId,
         url: api.trainerroad.workouts,
         data,
       });
-
       storage.set({ workout });
-      render(locale.downloaded);
+      render(mainLocale.downloaded);
     } catch (error) {
       render(error);
     }
@@ -41,14 +45,17 @@ const app = async () => {
   }
 
   if (host === pages.trainingpeaks) {
-    render(locale.uploading);
-
     try {
+      if (!libId) {
+        render(libraryLocale.fetching);
+        const libId = await fetchLibId(tab?.id);
+        storage.set({ libId });
+      }
+
+      render(mainLocale.uploading);
       const { workout } = await storage.get('workout');
-
       await uploadWorkout({ libId, tabId: tab?.id, workout });
-
-      render(locale.uploaded);
+      render(mainLocale.uploaded);
     } catch (error) {
       render(error);
     }
@@ -56,7 +63,7 @@ const app = async () => {
     return;
   }
 
-  render(locale.unknown);
+  render(mainLocale.unknown);
 };
 
 app();
