@@ -57,6 +57,7 @@ const app = async () => {
     }
   } catch (error) {
     render(error);
+    return;
   }
 
   render(mainLocale.unknown);
