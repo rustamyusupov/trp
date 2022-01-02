@@ -28,6 +28,12 @@ const app = async () => {
         return;
       }
 
+      const isWorkout = tab?.url.includes(`${api.trainerroad.workouts}/`);
+      if (!isWorkout) {
+        render(mainLocale.unknownTR);
+        return;
+      }
+
       render(mainLocale.downloading);
       const data = await fetchWorkout(tab?.url);
       const workout = convert({
@@ -46,6 +52,12 @@ const app = async () => {
         render(libraryLocale.fetching);
         const libId = await fetchLibId(tab?.id);
         storage.set({ libId });
+      }
+
+      const isCalendar = tab?.url.includes(api.trainingpeaks.calendar);
+      if (!isCalendar) {
+        render(mainLocale.unknownTP);
+        return;
       }
 
       render(mainLocale.uploading);
