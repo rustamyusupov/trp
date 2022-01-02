@@ -21,8 +21,8 @@ const app = async () => {
   const { host } = new URL(tab?.url);
   const { libId } = await storage.get('libId');
 
-  if (host === pages.trainerroad) {
-    try {
+  try {
+    if (host === pages.trainerroad) {
       if (!libId) {
         render(libraryLocale.warning);
         return;
@@ -37,15 +37,11 @@ const app = async () => {
       });
       storage.set({ workout });
       render(mainLocale.downloaded);
-    } catch (error) {
-      render(error);
+
+      return;
     }
 
-    return;
-  }
-
-  if (host === pages.trainingpeaks) {
-    try {
+    if (host === pages.trainingpeaks) {
       if (!libId) {
         render(libraryLocale.fetching);
         const libId = await fetchLibId(tab?.id);
@@ -56,11 +52,11 @@ const app = async () => {
       const { workout } = await storage.get('workout');
       await uploadWorkout({ libId, tabId: tab?.id, workout });
       render(mainLocale.uploaded);
-    } catch (error) {
-      render(error);
-    }
 
-    return;
+      return;
+    }
+  } catch (error) {
+    render(error);
   }
 
   render(mainLocale.unknown);
