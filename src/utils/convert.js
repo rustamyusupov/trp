@@ -1,6 +1,6 @@
-import { apis } from '../config.js';
-
-const getTpWorkout = (libId) => (data) => {
+// copied from https://github.com/pchalacis/trainerroad-to-trainingpeaks
+// refactor is needed
+export const convert = ({ libId, url, data }) => {
   const intervalData = data.Workout.intervalData;
   const structure = [];
   let end = 0;
@@ -64,7 +64,7 @@ const getTpWorkout = (libId) => (data) => {
   const duration = parseInt(data.Workout.Details.Duration) / 60;
   let description = data.Workout.Details.WorkoutDescription;
 
-  description += `\n\n${apis.tr.workouts}${data.Workout.Details.Id}`;
+  description += `\n\n${url}${data.Workout.Details.Id}`;
 
   const polyline = [];
   let lastPercent = 0;
@@ -121,8 +121,3 @@ const getTpWorkout = (libId) => (data) => {
 
   return workout;
 };
-
-export const download = (url, libId) =>
-  fetch(url, { credentials: 'include' })
-    .then((response) => response?.json())
-    .then(getTpWorkout(libId));
