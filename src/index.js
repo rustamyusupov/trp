@@ -1,8 +1,9 @@
-import { libId, pages, messageElement, messages } from './constants.js';
+import { libId, pages, messageElement } from './constants.js';
 import { api } from './api.js';
 import { fetchWorkout } from './trainerroad.js';
 import { convert, storage } from './utils/index.js';
 import { uploadWorkout } from './trainingpeaks.js';
+import { locale } from './locale.js';
 
 const getActiveTab = () =>
   chrome.tabs
@@ -20,7 +21,7 @@ const app = async () => {
   const { host } = new URL(tab?.url);
 
   if (host === pages.trainerroad) {
-    render(messages.downloading());
+    render(locale.downloading);
 
     try {
       const data = await fetchWorkout(tab?.url);
@@ -31,7 +32,7 @@ const app = async () => {
       });
 
       storage.set({ workout });
-      render(messages.downloaded(workout.itemName));
+      render(locale.downloaded);
     } catch (error) {
       render(error);
     }
@@ -40,23 +41,22 @@ const app = async () => {
   }
 
   if (host === pages.trainingpeaks) {
-    render(messages.uploading());
+    render(locale.uploading);
 
     try {
       const { workout } = await storage.get('workout');
 
-      const result = await uploadWorkout({ libId, tabId: tab?.id, workout });
+      await uploadWorkout({ libId, tabId: tab?.id, workout });
 
-      render(messages.uploaded(result?.itemName));
+      render(locale.uploaded);
     } catch (error) {
-      console.log(error);
       render(error);
     }
 
     return;
   }
 
-  render(messages.unknown());
+  render(locale.unknown);
 };
 
 app();

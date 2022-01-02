@@ -1,4 +1,4 @@
-import { routes } from '../routes.js';
+import { api } from '../api.js';
 
 const upload = (url, workout) =>
   fetch(url, {
@@ -11,7 +11,7 @@ const upload = (url, workout) =>
     .then(chrome.runtime.sendMessage);
 
 export const uploadWorkout = ({ libId, tabId, workout }) => {
-  const url = `${routes.trainingpeaks.libraries}/${libId}/items`;
+  const url = `${api.trainingpeaks.libraries}/${libId}/items`;
 
   return new Promise((resolve, reject) => {
     chrome.scripting.executeScript(
