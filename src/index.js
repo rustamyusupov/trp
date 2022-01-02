@@ -1,5 +1,5 @@
 import { libId, pages, messageElement, messages } from './constants.js';
-import { routes } from './routes.js';
+import { api } from './api.js';
 import { fetchWorkout } from './trainerroad.js';
 import { convert, storage } from './utils/index.js';
 import { uploadWorkout } from './trainingpeaks.js';
@@ -26,7 +26,7 @@ const app = async () => {
       const data = await fetchWorkout(tab?.url);
       const workout = convert({
         libId,
-        url: routes.trainerroad.workouts,
+        url: api.trainerroad.workouts,
         data,
       });
 

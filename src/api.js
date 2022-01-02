@@ -1,4 +1,4 @@
-export const routes = {
+export const api = {
   trainingpeaks: {
     calendar: 'https://app.trainingpeaks.com/#calendar',
     libraries: 'https://tpapi.trainingpeaks.com/exerciselibrary/v1/libraries',
