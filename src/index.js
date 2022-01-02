@@ -3,8 +3,9 @@ import { api } from './api.js';
 import { fetchWorkout } from './trainerroad.js';
 import { convert, storage } from './utils/index.js';
 import { fetchLibId, uploadWorkout } from './trainingpeaks.js';
-import { mainLocale, libraryLocale } from './locales/index.js';
 import { delay } from './utils/index.js';
+
+const { getMessage } = chrome.i18n;
 
 const getActiveTab = () =>
   chrome.tabs
@@ -25,17 +26,17 @@ const app = async () => {
   try {
     if (host === pages.trainerroad) {
       if (!libId) {
-        render(libraryLocale.warning);
+        render(getMessage('libraryWarning'));
         return;
       }
 
       const isWorkout = tab?.url.includes(`${api.trainerroad.workouts}/`);
       if (!isWorkout) {
-        render(mainLocale.unknownTR);
+        render(getMessage('unknownTR'));
         return;
       }
 
-      render(mainLocale.downloading);
+      render(getMessage('downloading'));
       const data = await fetchWorkout(tab?.url);
       const workout = convert({
         libId,
@@ -43,28 +44,28 @@ const app = async () => {
         data,
       });
       storage.set({ workout });
-      render(mainLocale.downloaded);
+      render(getMessage('downloaded', workout.itemName));
 
       return;
     }
 
     if (host === pages.trainingpeaks) {
       if (!libId) {
-        render(libraryLocale.fetching);
+        render(getMessage('libraryFetching'));
         const libId = await fetchLibId(tab?.id);
         storage.set({ libId });
       }
 
       const isCalendar = tab?.url.includes(api.trainingpeaks.calendar);
       if (!isCalendar) {
-        render(mainLocale.unknownTP);
+        render(getMessage('unknownTP'));
         return;
       }
 
-      render(mainLocale.uploading);
+      render(getMessage('uploading'));
       const { workout } = await storage.get('workout');
       await uploadWorkout({ libId, tabId: tab?.id, workout });
-      render(mainLocale.uploaded);
+      render(getMessage('uploaded', workout.itemName));
       await delay(1);
       chrome.tabs.reload(tab?.id);
 
@@ -75,7 +76,7 @@ const app = async () => {
     return;
   }
 
-  render(mainLocale.unknown);
+  render(getMessage('unknown'));
 };
 
 app();

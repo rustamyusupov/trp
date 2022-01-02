@@ -4,6 +4,7 @@
   "version": "0.1",
   "author": "Rustam Yusupov",
   "manifest_version": 3,
+  "default_locale": "en",
   "permissions": ["activeTab", "storage", "scripting"],
   "action": {
     "default_popup": "index.html"

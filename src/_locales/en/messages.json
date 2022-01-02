@@ -1,0 +1,39 @@
+{
+  "downloaded": {
+    "message": "Workout $NAME$ downloaded.",
+    "placeholders": {
+      "name": {
+        "content": "$1"
+      }
+    }
+  },
+  "downloading": {
+    "message": "Downloading..."
+  },
+  "libraryFetching": {
+    "message": "Fetching library ID..."
+  },
+  "libraryWarning": {
+    "message": "Please open TP for get library ID"
+  },
+  "unknown": {
+    "message": "Please open TR&nbsp;workout or TP&nbsp;calendar."
+  },
+  "unknownTP": {
+    "message": "Please open TP&nbsp;calendar."
+  },
+  "unknownTR": {
+    "message": "Please open TR&nbsp;workout."
+  },
+  "uploaded": {
+    "message": "Workout $NAME$ uploaded to the&nbsp;Library, reload...",
+    "placeholders": {
+      "name": {
+        "content": "$1"
+      }
+    }
+  },
+  "uploading": {
+    "message": "Uploading..."
+  }
+}
