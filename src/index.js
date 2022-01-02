@@ -5,8 +5,6 @@ import { convert, storage } from './utils/index.js';
 import { fetchLibId, uploadWorkout } from './trainingpeaks.js';
 import { delay } from './utils/index.js';
 
-const { getMessage } = chrome.i18n;
-
 const getActiveTab = () =>
   chrome.tabs
     .query({
@@ -19,6 +17,7 @@ const render = (content) =>
   (document.getElementById(messageElement).innerHTML = content);
 
 const app = async () => {
+  const { tabs, i18n } = chrome;
   const tab = await getActiveTab();
   const { host } = new URL(tab?.url);
   const { libId } = await storage.get('libId');
@@ -26,17 +25,17 @@ const app = async () => {
   try {
     if (host === pages.trainerroad) {
       if (!libId) {
-        render(getMessage('libraryWarning'));
+        render(i18n.getMessage('libraryWarning'));
         return;
       }
 
       const isWorkout = tab?.url.includes(`${api.trainerroad.workouts}/`);
       if (!isWorkout) {
-        render(getMessage('unknownTR'));
+        render(i18n.getMessage('unknownTR'));
         return;
       }
 
-      render(getMessage('downloading'));
+      render(i18n.getMessage('downloading'));
       const data = await fetchWorkout(tab?.url);
       const workout = convert({
         libId,
@@ -44,30 +43,30 @@ const app = async () => {
         data,
       });
       storage.set({ workout });
-      render(getMessage('downloaded', workout.itemName));
+      render(i18n.getMessage('downloaded', workout.itemName));
 
       return;
     }
 
     if (host === pages.trainingpeaks) {
       if (!libId) {
-        render(getMessage('libraryFetching'));
+        render(i18n.getMessage('libraryFetching'));
         const libId = await fetchLibId(tab?.id);
         storage.set({ libId });
       }
 
       const isCalendar = tab?.url.includes(api.trainingpeaks.calendar);
       if (!isCalendar) {
-        render(getMessage('unknownTP'));
+        render(i18n.getMessage('unknownTP'));
         return;
       }
 
-      render(getMessage('uploading'));
+      render(i18n.getMessage('uploading'));
       const { workout } = await storage.get('workout');
       await uploadWorkout({ libId, tabId: tab?.id, workout });
-      render(getMessage('uploaded', workout.itemName));
+      render(i18n.getMessage('uploaded', workout.itemName));
       await delay(1);
-      chrome.tabs.reload(tab?.id);
+      tabs.reload(tab?.id);
 
       return;
     }
@@ -76,7 +75,7 @@ const app = async () => {
     return;
   }
 
-  render(getMessage('unknown'));
+  render(i18n.getMessage('unknown'));
 };
 
 app();
