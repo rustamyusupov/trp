@@ -10,11 +10,8 @@
   "downloading": {
     "message": "Downloading..."
   },
-  "libraryFetching": {
+  "library": {
     "message": "Fetching library ID..."
-  },
-  "libraryWarning": {
-    "message": "Please open TP for get library ID"
   },
   "unknown": {
     "message": "Please open TR&nbsp;workout or TP&nbsp;calendar."

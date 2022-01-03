@@ -24,45 +24,42 @@ const app = async () => {
 
   try {
     if (host === pages.trainerroad) {
-      if (!libId) {
-        render(i18n.getMessage('libraryWarning'));
-        return;
-      }
-
       const isWorkout = tab?.url.includes(`${api.trainerroad.workouts}/`);
+
       if (!isWorkout) {
         render(i18n.getMessage('unknownTR'));
         return;
       }
 
       render(i18n.getMessage('downloading'));
-      const data = await fetchWorkout(tab?.url);
-      const workout = convert({
-        libId,
-        url: api.trainerroad.workouts,
-        data,
-      });
-      storage.set({ workout });
-      render(i18n.getMessage('downloaded', workout.itemName));
+      const { Workout } = await fetchWorkout(tab?.url);
+      storage.set({ workout: Workout });
+      render(i18n.getMessage('downloaded', Workout.Details.WorkoutName));
 
       return;
     }
 
     if (host === pages.trainingpeaks) {
       if (!libId) {
-        render(i18n.getMessage('libraryFetching'));
+        render(i18n.getMessage('library'));
         const libId = await fetchLibId(tab?.id);
         storage.set({ libId });
       }
 
       const isCalendar = tab?.url.includes(api.trainingpeaks.calendar);
+
       if (!isCalendar) {
         render(i18n.getMessage('unknownTP'));
         return;
       }
 
       render(i18n.getMessage('uploading'));
-      const { workout } = await storage.get('workout');
+      const data = await storage.get('workout');
+      const workout = convert({
+        libId,
+        url: api.trainerroad.workouts,
+        data: data.workout,
+      });
       await uploadWorkout({ libId, tabId: tab?.id, workout });
       render(i18n.getMessage('uploaded', workout.itemName));
       await delay(1);

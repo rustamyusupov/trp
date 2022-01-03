@@ -1,7 +1,7 @@
 // copied from https://github.com/pchalacis/trainerroad-to-trainingpeaks
 // refactor is needed
 export const convert = ({ libId, url, data }) => {
-  const intervalData = data.Workout.intervalData;
+  const intervalData = data.intervalData;
   const structure = [];
   let end = 0;
   let testInterval = false;
@@ -61,10 +61,10 @@ export const convert = ({ libId, url, data }) => {
     });
   }
 
-  const duration = parseInt(data.Workout.Details.Duration) / 60;
-  let description = data.Workout.Details.WorkoutDescription;
+  const duration = parseInt(data.Details.Duration) / 60;
+  let description = data.Details.WorkoutDescription;
 
-  description += `\n\n${url}${data.Workout.Details.Id}`;
+  description += `\n\n${url}${data.Details.Id}`;
 
   const polyline = [];
   let lastPercent = 0;
@@ -87,16 +87,16 @@ export const convert = ({ libId, url, data }) => {
   const workout = {
     exerciseLibraryId: libId,
     exerciseLibraryItemId: '',
-    itemName: data.Workout.Details.WorkoutName,
+    itemName: data.Details.WorkoutName,
     itemType: 2,
-    workoutId: data.Workout.Details.Id,
+    workoutId: data.Details.Id,
     workoutTypeId: 2,
     workoutType: '',
     distancePlanned: '',
     totalTimePlanned: duration,
-    caloriesPlanned: parseInt(data.Workout.Details.Kj) * 0.239006,
-    tssPlanned: data.Workout.Details.TSS,
-    ifPlanned: parseInt(data.Workout.Details.IntensityFactor) / 100,
+    caloriesPlanned: parseInt(data.Details.Kj) * 0.239006,
+    tssPlanned: data.Details.TSS,
+    ifPlanned: parseInt(data.Details.IntensityFactor) / 100,
     velocityPlanned: '',
     energyPlanned: '',
     elevationGainPlanned: '',
