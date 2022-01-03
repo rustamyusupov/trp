@@ -1,3 +1,3 @@
 # TRP
 
-TRP is a chrome extension for copy TrainerRoad workouts to TrainerPeaks.
+TRP is a chrome extension for copy TrainerRoad workout to TrainerPeaks.
