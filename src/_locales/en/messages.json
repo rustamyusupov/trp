@@ -10,7 +10,7 @@
   "downloading": {
     "message": "Downloading..."
   },
-  "library": {
+  "fetching": {
     "message": "Fetching library ID..."
   },
   "unknown": {
@@ -32,5 +32,8 @@
   },
   "uploading": {
     "message": "Uploading..."
+  },
+  "workout": {
+    "message": "Please download the workout first."
   }
 }

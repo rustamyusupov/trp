@@ -1,4 +1,4 @@
-import { api } from './api.js';
+const MyLibraryName = 'My Library';
 
 const request = (url, options) =>
   fetch(url, {
@@ -10,7 +10,7 @@ const request = (url, options) =>
     .then((response) => response?.json())
     .then(chrome.runtime.sendMessage);
 
-const script = ({ tabId, url, options = {} }) =>
+const script = ({ url, tabId, options = {} }) =>
   new Promise((resolve, reject) => {
     chrome.scripting.executeScript(
       {
@@ -33,19 +33,18 @@ const script = ({ tabId, url, options = {} }) =>
     );
   });
 
-export const fetchLibId = async (tabId) => {
-  const result = await script({ tabId, url: api.trainingpeaks.libraries });
+export const fetchLibId = async ({ url, tabId }) => {
+  const result = await script({ url, tabId });
   const library = result.find(
-    ({ libraryName }) => libraryName === 'My Library'
+    ({ libraryName }) => libraryName === MyLibraryName
   );
 
   return library?.exerciseLibraryId;
 };
 
-export const uploadWorkout = async ({ libId, tabId, workout }) => {
-  const url = `${api.trainingpeaks.libraries}/${libId}/items`;
+export const uploadWorkout = async ({ url, tabId, workout }) => {
   const options = { method: 'POST', body: JSON.stringify(workout) };
-  const result = await script({ tabId, url, options });
+  const result = await script({ url, tabId, options });
 
   return result;
 };
