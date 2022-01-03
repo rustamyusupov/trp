@@ -10,20 +10,17 @@
   "downloading": {
     "message": "Downloading..."
   },
-  "fetchingLibraryId": {
+  "fetching": {
     "message": "Fetching library ID..."
   },
-  "notCalendarPage": {
-    "message": "Please open calendar page."
-  },
-  "notWorkoutPage": {
-    "message": "Please open workout details page."
-  },
-  "noWorkout": {
-    "message": "Please download the workout first."
-  },
-  "unknownResource": {
+  "unknown": {
     "message": "Please open TR&nbsp;workout or TP&nbsp;calendar."
+  },
+  "unknownTP": {
+    "message": "Please open TP&nbsp;calendar."
+  },
+  "unknownTR": {
+    "message": "Please open TR&nbsp;workout."
   },
   "uploaded": {
     "message": "Workout $NAME$ uploaded to the&nbsp;Library, reload...",
@@ -35,5 +32,8 @@
   },
   "uploading": {
     "message": "Uploading..."
+  },
+  "workout": {
+    "message": "Please download the workout first."
   }
 }
