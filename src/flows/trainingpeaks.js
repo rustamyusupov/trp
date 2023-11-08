@@ -10,9 +10,7 @@ const MyLibraryName = 'My Library';
 
 const fetchLibId = async ({ url, tabId }) => {
   const result = await script({ url, tabId });
-  const library = result.find(
-    ({ libraryName }) => libraryName === MyLibraryName
-  );
+  const library = result?.[0]?.result.find(({ libraryName }) => libraryName === MyLibraryName);
 
   return library?.exerciseLibraryId;
 };

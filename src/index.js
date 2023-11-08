@@ -6,7 +6,7 @@ const getActiveTab = () =>
       active: true,
       currentWindow: true,
     })
-    .then((tabs) => tabs?.[0]);
+    .then(tabs => tabs?.[0]);
 
 const app = async () => {
   const { url, id } = await getActiveTab();

@@ -4,29 +4,27 @@ const request = (url, options) =>
     credentials: 'include',
     headers: { 'Content-Type': 'application/json' },
     ...options,
-  })
-    .then((response) => response?.json())
-    .then(chrome.runtime.sendMessage);
+  }).then(response => console.log('fetch') || response?.json());
 
 export default ({ url, tabId, options = {} }) =>
   new Promise((resolve, reject) => {
-    chrome.scripting.executeScript(
-      {
+    chrome.scripting
+      .executeScript({
         target: { tabId },
-        function: request,
+        func: request,
         args: [url, options],
-      },
-      new Promise((res) => {
-        chrome.runtime.onMessage.addListener(function listener(result) {
-          chrome.runtime.onMessage.removeListener(listener);
-
-          if (result?.message) {
-            reject(result.message);
-          }
-
-          resolve(result);
-          res();
-        });
       })
-    );
+      .then(result => {
+        if (!result) {
+          reject(new Error('No result'));
+          return;
+        }
+
+        if (result.error) {
+          reject(new Error(result.error));
+          return;
+        }
+
+        resolve(result);
+      });
   });
