@@ -1,6 +1,6 @@
 {
   "name": "trp",
-  "version": "0.2.0",
+  "version": "0.1.2",
   "description": "TRP is a chrome extension for copy TrainerRoad workouts to TrainerPeaks.",
   "author": "Rustam Yusupov",
   "license": "ISC",
