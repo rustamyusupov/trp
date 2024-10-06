@@ -12,6 +12,6 @@
     "deploy": "npm run clean && npm run build && cp -R src/manifest.json src/_locales src/images dist/ && cd dist && zip -rm dist.zip * && cd .."
   },
   "devDependencies": {
-    "parcel": "^2.0.1"
+    "parcel": "^2.12.0"
   }
 }
