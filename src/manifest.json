@@ -1,7 +1,7 @@
 {
   "name": "TRP",
   "description": "Copy TrainerRoad workout to TrainerPeaks",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "author": "Rustam Yusupov",
   "manifest_version": 3,
   "default_locale": "en",
