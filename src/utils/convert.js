@@ -6,19 +6,16 @@ export default ({ libId, url, data }) => {
   let end = 0;
   let testInterval = false;
 
-  for (let i = 1; i < intervalData.length; i++) {
+  for (let i = 1; i < intervalData?.length; i++) {
     if (intervalData[i].TestInterval) {
       testInterval = intervalData[i];
       break;
     }
   }
 
-  for (let i = 1; i < intervalData.length; i++) {
+  for (let i = 1; i < intervalData?.length; i++) {
     if (testInterval && testInterval.Name !== intervalData[i].Name) {
-      if (
-        intervalData[i].Start >= testInterval.Start &&
-        intervalData[i].End <= testInterval.End
-      ) {
+      if (intervalData[i].Start >= testInterval.Start && intervalData[i].End <= testInterval.End) {
         continue;
       }
     }
@@ -26,7 +23,7 @@ export default ({ libId, url, data }) => {
     let ic = 'warmUp';
     if (i == 1) {
       ic = 'warmUp';
-    } else if (i === intervalData.length) {
+    } else if (i === intervalData?.length) {
       ic = 'coolDown';
     } else if (intervalData[i].StartTargetPowerPercent > 60) {
       ic = 'active';
@@ -69,7 +66,7 @@ export default ({ libId, url, data }) => {
   const polyline = [];
   let lastPercent = 0;
 
-  for (let i = 1; i < intervalData.length; i++) {
+  for (let i = 1; i < intervalData?.length; i++) {
     polyline.push([parseFloat(intervalData[i].Start / end), 0]);
     polyline.push([
       parseFloat(intervalData[i].Start / end),
